@@ -1,0 +1,4 @@
+template: genai_launchpad
+template_set: 2025-08-17T14:50:00Z
+template_immutable: true
+template_source: .claude/templates/genai-launchpad
