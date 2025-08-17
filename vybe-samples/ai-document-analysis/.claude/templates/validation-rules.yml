@@ -1,0 +1,201 @@
+# Validation Rules Template
+# AI uses this structure to create .vybe/validation/ files based on template analysis
+
+# Example: structure-rules.yml
+structure_validation:
+  # Directory structure validation
+  required_directories:
+    check: directory_exists
+    directories:
+      - src/
+      - tests/
+      - docs/
+    severity: error
+    message: "Required directory missing: {directory}"
+  
+  recommended_directories:
+    check: directory_exists
+    directories:
+      - scripts/
+      - assets/
+    severity: warning
+    message: "Recommended directory missing: {directory}"
+  
+  # File structure validation
+  required_files:
+    check: file_exists
+    rules:
+      - location: "src/"
+        files: ["__init__.py", "main.py"]
+        condition: "python_project"
+      - location: "src/"
+        files: ["index.js", "app.js"]
+        condition: "node_project"
+    severity: error
+    message: "Required file missing: {file} in {location}"
+
+# Example: naming-rules.yml
+naming_validation:
+  # File naming conventions
+  file_naming:
+    check: naming_pattern
+    rules:
+      - pattern: "^[a-z][a-z0-9_]*\\.py$"
+        applies_to: "*.py"
+        style: "snake_case"
+      - pattern: "^[A-Z][a-zA-Z0-9]*\\.jsx?$"
+        applies_to: "src/components/*.js|*.jsx"
+        style: "PascalCase"
+      - pattern: "^[a-z][a-z0-9-]*\\.(js|ts)$"
+        applies_to: "src/utils/*.js|*.ts"
+        style: "kebab-case"
+    severity: warning
+    message: "File {file} doesn't follow {style} naming convention"
+  
+  # Directory naming conventions  
+  directory_naming:
+    check: naming_pattern
+    rules:
+      - pattern: "^[a-z][a-z0-9_]*$"
+        applies_to: "src/*/"
+        style: "snake_case"
+      - pattern: "^[a-z][a-z0-9-]*$"
+        applies_to: "components/*/"
+        style: "kebab-case"
+    severity: warning
+    message: "Directory {directory} doesn't follow {style} naming convention"
+  
+  # Class and function naming
+  code_naming:
+    check: code_pattern
+    rules:
+      - pattern: "^class [A-Z][a-zA-Z0-9]*"
+        applies_to: "*.py"
+        style: "PascalCase classes"
+      - pattern: "^def [a-z][a-z0-9_]*"
+        applies_to: "*.py"
+        style: "snake_case functions"
+    severity: info
+    message: "Consider following {style} convention for {element}"
+
+# Example: import-rules.yml
+import_validation:
+  # Import pattern validation
+  import_patterns:
+    check: import_style
+    rules:
+      - pattern: "relative_imports"
+        description: "Use relative imports within package"
+        applies_to: "src/**/*.py"
+        example: "from .module import function"
+        
+      - pattern: "absolute_imports"
+        description: "Use absolute imports for external packages"
+        applies_to: "src/**/*.py"
+        example: "from package.module import function"
+        
+      - pattern: "grouped_imports"
+        description: "Group imports: stdlib, third-party, local"
+        applies_to: "**/*.py"
+        
+    severity: info
+    message: "Consider following {pattern}: {description}"
+  
+  # Forbidden imports
+  forbidden_imports:
+    check: import_blacklist
+    rules:
+      - imports: ["from tests import *"]
+        reason: "Don't import test code in production"
+        severity: error
+        
+      - imports: ["import os", "import sys"]
+        applies_to: "src/models/*.py"
+        reason: "Models should not access system directly"
+        severity: warning
+        
+    message: "Forbidden import detected: {import}. Reason: {reason}"
+
+# Example: testing-rules.yml
+testing_validation:
+  # Test structure validation
+  test_structure:
+    check: test_organization
+    rules:
+      - requirement: "test_file_for_each_module"
+        description: "Each module should have corresponding test file"
+        pattern: "src/{module}.py -> tests/test_{module}.py"
+        severity: warning
+        
+      - requirement: "test_coverage"
+        description: "Minimum test coverage threshold"
+        threshold: 80
+        severity: error
+        
+      - requirement: "test_naming"
+        description: "Test functions should start with 'test_'"
+        pattern: "^test_[a-z][a-z0-9_]*$"
+        severity: warning
+        
+    message: "Testing requirement not met: {requirement}"
+  
+  # Test quality validation
+  test_quality:
+    check: test_patterns
+    rules:
+      - pattern: "arrange_act_assert"
+        description: "Tests should follow Arrange-Act-Assert pattern"
+        
+      - pattern: "descriptive_names"
+        description: "Test names should describe what they test"
+        
+      - pattern: "isolated_tests"
+        description: "Tests should not depend on each other"
+        
+    severity: info
+    message: "Consider improving test quality: {pattern}"
+
+# Example: quality-rules.yml
+quality_validation:
+  # Code quality checks
+  code_quality:
+    check: quality_metrics
+    rules:
+      - metric: "function_length"
+        threshold: 50
+        unit: "lines"
+        severity: warning
+        message: "Function {function} is {actual} lines (max: {threshold})"
+        
+      - metric: "cyclomatic_complexity"
+        threshold: 10
+        severity: warning
+        message: "Function {function} has complexity {actual} (max: {threshold})"
+        
+      - metric: "file_length"
+        threshold: 500
+        unit: "lines"
+        severity: info
+        message: "File {file} is {actual} lines (consider splitting at {threshold})"
+  
+  # Documentation requirements
+  documentation:
+    check: documentation_coverage
+    rules:
+      - requirement: "public_functions_documented"
+        pattern: "docstring_present"
+        severity: warning
+        
+      - requirement: "classes_documented"
+        pattern: "class_docstring"
+        severity: warning
+        
+      - requirement: "api_endpoints_documented"
+        pattern: "endpoint_docstring"
+        severity: error
+        
+    message: "Documentation missing: {requirement} for {element}"
+
+# AI Note: These are template structures showing the validation format.
+# The actual validation rules will be generated based on patterns
+# discovered in the analyzed template, not these generic examples.

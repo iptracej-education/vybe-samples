@@ -1,0 +1,103 @@
+# Enforcement Structure Template
+# AI uses this as a guide for creating .vybe/enforcement/ files
+
+# Example: structure.yml
+structure_requirements:
+  # Required top-level directories (based on template analysis)
+  required_directories:
+    - src/
+    - tests/
+    - docs/
+    - config/
+  
+  # Optional but recommended directories
+  recommended_directories:
+    - scripts/
+    - assets/
+    - examples/
+  
+  # File requirements within directories
+  directory_rules:
+    src/:
+      required_files:
+        - __init__.py  # For Python projects
+        - index.js     # For Node.js projects
+      structure: modular|flat|layered
+    
+    tests/:
+      required_files:
+        - __init__.py
+      naming_pattern: test_*.py|*.test.js|*_test.go
+      structure: mirror_src|separate
+    
+    docs/:
+      recommended_files:
+        - README.md
+        - API.md
+        - CONTRIBUTING.md
+
+# Example: components.yml  
+component_patterns:
+  # How components should be created
+  component_structure:
+    location: src/components/
+    naming: PascalCase|kebab-case|snake_case
+    file_pattern: Component.ext|component.ext|component/index.ext
+    
+  # Required component elements
+  component_requirements:
+    - interface_definition
+    - implementation
+    - tests
+    - documentation
+    
+  # Component organization
+  organization:
+    grouping: by_feature|by_type|flat
+    shared_components: src/shared/|src/common/|src/components/common/
+
+# Example: services.yml
+service_patterns:
+  # Service layer organization
+  service_location: src/services/|src/business/|src/domain/
+  naming_convention: ServiceName|service_name|service-name
+  
+  # Service structure requirements
+  service_structure:
+    interface: required|optional
+    implementation: required
+    tests: required
+    documentation: recommended
+    
+  # Service dependencies
+  dependency_injection: enabled|disabled
+  service_registration: manual|automatic
+  
+  # API patterns (if applicable)
+  api_patterns:
+    endpoint_location: src/api/|src/routes/|src/controllers/
+    route_definition: declarative|programmatic
+    middleware_location: src/middleware/|src/api/middleware/
+
+# Example: workflows.yml (for templates with workflow concepts)
+workflow_patterns:
+  # Workflow organization (e.g., for GenAI Launchpad)
+  workflow_location: src/workflows/|workflows/|app/workflows/
+  node_location: src/nodes/|src/workflow_nodes/|app/nodes/
+  
+  # Workflow structure
+  workflow_requirements:
+    - workflow_definition
+    - node_implementations  
+    - workflow_tests
+    - workflow_documentation
+    
+  # Node patterns
+  node_patterns:
+    base_class: BaseNode|Node|WorkflowNode
+    required_methods:
+      - execute
+      - validate
+    optional_methods:
+      - setup
+      - teardown

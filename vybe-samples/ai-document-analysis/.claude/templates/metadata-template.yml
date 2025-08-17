@@ -1,0 +1,101 @@
+# Template Metadata Structure
+# This file shows the structure AI should follow when creating metadata.yml
+
+name: template-name
+source: source-url-or-path
+source_type: github|local
+imported: ISO-timestamp
+status: imported|analyzed|ready
+
+# Analysis results (populated by AI during generation)
+analyzed: true
+analysis_date: ISO-timestamp
+structures_generated: true
+
+# AI-discovered template information
+analysis:
+  # Primary technology detection
+  primary_language: detected-language
+  frameworks: 
+    - framework1
+    - framework2
+  libraries:
+    - library1
+    - library2
+  
+  # Template classification
+  template_type: api|frontend|fullstack|microservice|ml|data|mobile
+  complexity: simple|moderate|complex|enterprise
+  architecture_pattern: mvc|microservices|monolith|serverless|jamstack
+  
+  # Structure analysis
+  total_files: number
+  code_files: number
+  config_files: number
+  documentation_files: number
+  
+  # Pattern identification
+  patterns_extracted: number
+  components_identified: number
+  services_identified: number
+  api_endpoints_identified: number
+  
+  # Development characteristics
+  has_tests: boolean
+  has_ci_cd: boolean
+  has_docker: boolean
+  has_database: boolean
+  has_authentication: boolean
+  has_api_docs: boolean
+  
+  # Directory structure summary
+  key_directories:
+    - src/
+    - tests/
+    - docs/
+  
+  # Entry points and important files
+  entry_points:
+    - main.py
+    - app.js
+    - index.html
+  
+  # Dependencies and build tools
+  package_managers:
+    - npm
+    - pip
+    - composer
+  build_tools:
+    - webpack
+    - vite
+    - maven
+
+# Vybe integration mapping
+vybe_mapping:
+  # How template structure maps to Vybe features
+  potential_features:
+    - feature_name: user-management
+      source_location: src/auth/
+      description: Authentication and user management
+    - feature_name: api-endpoints
+      source_location: src/api/
+      description: REST API implementation
+  
+  # Incremental development stages
+  suggested_stages:
+    - stage: 1
+      description: Basic setup and core structure
+      deliverable: Working application skeleton
+    - stage: 2
+      description: Core functionality implementation
+      deliverable: Main features working
+    - stage: 3
+      description: Enhancement and polish
+      deliverable: Production-ready application
+  
+  # Template-specific conventions
+  conventions:
+    file_naming: snake_case|camelCase|kebab-case
+    directory_structure: flat|nested|modular
+    import_style: relative|absolute|mixed
+    test_location: separate|colocated|tests-dir
