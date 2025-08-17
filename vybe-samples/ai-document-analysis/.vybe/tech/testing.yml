@@ -1,0 +1,52 @@
+# Testing Framework Configuration
+unit_testing:
+  framework: pytest
+  version: ">=8.0.0"
+  config_file: pytest.ini
+  test_directory: tests/
+  
+integration_testing:
+  framework: pytest
+  fixtures: pytest-asyncio
+  database: pytest-postgresql
+  
+test_commands:
+  run_all: "pytest"
+  run_unit: "pytest tests/unit"
+  run_integration: "pytest tests/integration"
+  run_coverage: "pytest --cov=app --cov-report=html"
+  run_verbose: "pytest -v"
+  run_failed: "pytest --lf"
+  
+coverage:
+  tool: pytest-cov
+  minimum: 80
+  report_format: 
+    - html
+    - term
+    - xml
+  
+fixtures:
+  - pytest-asyncio  # Async test support
+  - pytest-env      # Environment variable management
+  - pytest-mock     # Mocking support
+  
+recommended_structure:
+  - tests/
+    - unit/
+      - test_services.py
+      - test_workflows.py
+      - test_schemas.py
+    - integration/
+      - test_api.py
+      - test_database.py
+      - test_celery.py
+    - fixtures/
+      - conftest.py
+      - sample_data.py
+
+# Development Testing
+development:
+  hot_reload: true
+  test_watch: "pytest-watch"
+  debug_mode: true

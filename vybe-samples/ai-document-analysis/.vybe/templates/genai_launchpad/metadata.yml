@@ -1,0 +1,62 @@
+# Template Metadata
+name: genai_launchpad
+source: local
+imported: "2025-08-17T14:48:00Z"
+analyzed: true
+template_type: ai_application
+
+# Detected Technologies
+languages:
+  primary: python
+  version: ">=3.12"
+  package_manager: uv
+
+frameworks:
+  backend:
+    - name: FastAPI
+      version: ">=0.115.12"
+    - name: Celery
+      version: ">=5.5.3"
+  ai:
+    - name: Instructor
+      version: ">=1.8.3"
+    - name: Pydantic-AI
+      version: ">=0.2.16"
+  database:
+    - name: PostgreSQL
+      driver: psycopg2-binary
+    - name: Redis
+      version: ">=6.2.0"
+    - name: Supabase
+      type: backend-as-a-service
+
+deployment:
+  containerization: Docker
+  orchestration: docker-compose
+  services:
+    - Supabase (Auth, Database, Storage)
+    - Kong (API Gateway)
+    - Vector (Logging)
+
+patterns:
+  - Workflow-based architecture
+  - Event-driven processing
+  - AI agent orchestration
+  - Prompt management system
+  - Multi-model support
+
+structure:
+  main_app: app/
+  api_endpoints: app/api/
+  core_logic: app/core/
+  workflows: app/core/workflow.py
+  commands: app/core/commands/
+  playground: playground/
+  docker_config: docker/
+  requests: requests/
+
+development_tools:
+  linting: ruff
+  type_checking: pyright
+  package_management: uv
+  python_version: "3.12+"

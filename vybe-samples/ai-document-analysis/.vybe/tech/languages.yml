@@ -1,0 +1,31 @@
+# Primary Language Configuration
+primary_language: python
+version: "3.12+"
+package_manager: uv
+
+# Language Requirements
+requirements:
+  minimum_version: "3.12"
+  recommended_version: "3.12.7"
+  
+# Package Management
+package_management:
+  tool: uv
+  lockfile: uv.lock
+  config_file: pyproject.toml
+  virtual_env: .venv
+  
+# Installation Commands
+install:
+  - "curl -LsSf https://astral.sh/uv/install.sh | sh"  # Install uv
+  - "uv venv"  # Create virtual environment
+  - "source .venv/bin/activate"  # Activate venv (Linux/Mac)
+  - "uv pip sync uv.lock"  # Install dependencies
+
+# Development Commands
+commands:
+  install_deps: "uv pip sync uv.lock"
+  add_package: "uv pip install <package> && uv pip freeze > requirements.txt"
+  update_deps: "uv pip compile pyproject.toml -o uv.lock"
+  run_script: "python"
+  shell: "python"

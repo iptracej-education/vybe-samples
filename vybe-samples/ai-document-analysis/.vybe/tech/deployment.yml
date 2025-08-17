@@ -1,0 +1,104 @@
+# Deployment Configuration
+
+# Container Orchestration
+containerization:
+  platform: Docker
+  orchestration: docker-compose
+  registry: Docker Hub (optional)
+
+# Docker Services
+services:
+  app:
+    image: python:3.12-slim
+    ports: ["8000:8000"]
+    environment: .env
+    volumes:
+      - ./app:/app
+    depends_on:
+      - postgres
+      - redis
+      
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports: ["5432:5432"]
+    
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    
+  celery_worker:
+    build: .
+    command: celery -A app.worker worker --loglevel=info
+    depends_on:
+      - redis
+      - postgres
+      
+  celery_beat:
+    build: .
+    command: celery -A app.worker beat --loglevel=info
+    depends_on:
+      - redis
+      
+  supabase:
+    deployment: Self-hosted
+    components:
+      - kong (API Gateway)
+      - gotrue (Auth)
+      - realtime (WebSockets)
+      - storage-api (File Storage)
+      - postgres-meta (Database Management)
+      - studio (Admin UI)
+    config: docker-compose.supabase.yml
+
+# Deployment Commands
+commands:
+  build: "docker-compose build"
+  up: "docker-compose up -d"
+  down: "docker-compose down"
+  logs: "docker-compose logs -f"
+  restart: "docker-compose restart"
+  
+# Production Deployment
+production:
+  reverse_proxy: Caddy
+  ssl: Automatic via Caddy
+  environment_variables:
+    - DATABASE_URL
+    - REDIS_URL
+    - OPENAI_API_KEY
+    - SECRET_KEY
+    - SUPABASE_URL
+    - SUPABASE_ANON_KEY
+    
+# Health Checks
+health_checks:
+  app: "/health"
+  database: "pg_isready"
+  redis: "redis-cli ping"
+  
+# Scaling Strategy
+scaling:
+  horizontal:
+    web: "Increase uvicorn workers"
+    workers: "Add more Celery workers"
+  vertical:
+    memory: "Increase container memory limits"
+    cpu: "Increase container CPU limits"
+
+# Monitoring
+monitoring:
+  logs: Vector
+  metrics: Prometheus (optional)
+  tracing: OpenTelemetry (optional)
+  
+# Backup Strategy
+backup:
+  database: "pg_dump scheduled via cron"
+  files: "Volume snapshots"
+  frequency: "Daily"
